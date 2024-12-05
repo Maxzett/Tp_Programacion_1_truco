@@ -2,7 +2,7 @@ import pygame
 from modulos.constantes import *
 from modulos.funciones import dibujar_texto
 
-def jugar_envido(cartas_emisor: list, cartas_receptor: list, puntos_emisor: int, puntos_receptor: int, respuesta: bool):
+def jugar_envido(cartas_emisor: list, cartas_receptor: list, puntos_emisor: int, puntos_receptor: int, respuesta: bool) -> int:
     
     def calcular_puntaje_envido(cartas: list) -> int:
         #dict de equivalencias para envido
@@ -36,7 +36,7 @@ def jugar_envido(cartas_emisor: list, cartas_receptor: list, puntos_emisor: int,
         mensaje_resultado = f"Emisor gano Envido con {tantos_emisor} por ser mano."
     
     # Mostrar el resultado del envido
-    dibujar_texto(mensaje_resultado, FUENTE_M, BLANCO, pantalla, ANCHO // 2, ALTO // 2 + 50)
+    dibujar_texto(mensaje_resultado, FUENTE_M, BLANCO, pantalla, ANCHO // 2, ALTO // 2)
     pygame.display.flip()
     pygame.time.wait(3000)
     

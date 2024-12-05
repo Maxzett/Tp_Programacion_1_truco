@@ -49,17 +49,22 @@ def iniciar_partida():
     
     envido_activo = False
     truco_activo = False    
+    
     # Inicializar variables del juego
     juego_activo = True
     mano_actual = 'jugador'
     
+    # Acumular resultados
+    cartas_mesa = []
+    
     while juego_activo:
         
         pantalla.fill(VIOLETA)
-        dibujar_texto(f'P. Jugador: {puntos_jugador} - P.Maquina: {puntos_maquina}', FUENTE_S, NEGRO, pantalla, 200, 100)
+        dibujar_texto(f'PUNTOS TOTALES:', FUENTE_S, NEGRO, pantalla, 200, 70)
+        dibujar_texto(f'Jugador: {puntos_jugador} - Maquina: {puntos_maquina}', FUENTE_S, NEGRO, pantalla, 200, 100)
         mouse_pos = pygame.mouse.get_pos()
 
-        dibujar_carta(pantalla, BLANCO, 480, 300)
+        # dibujar_carta(pantalla, BLANCO, ANCHO // 2, ALTO // 2)
         
         mostrar_cartas(cartas_maquina, pos_x_inicial_maquina, pos_y_maquina, visible=False)
         mostrar_cartas(cartas_jugador, pos_x_inicial_jugador, pos_y_jugador, visible=True)
@@ -68,37 +73,48 @@ def iniciar_partida():
         
         pygame.display.flip()
         
+        # Verificacion Truco activo y suma de puntos
         if truco_activo and evaluar_ganador_ronda == 'jugador':
             puntos_jugador += 2
         elif truco_activo and evaluar_ganador_ronda == 'maquina':
             puntos_maquina += 2
-            
+        
         # Verificar si alguien alcanzó los puntos objetivo
         if puntos_jugador >= puntos_objetivo or puntos_maquina >= puntos_objetivo:
             juego_activo = False
-        
+            
         # Manejar eventos
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 juego_activo = False
             if evento.type == pygame.MOUSEBUTTONDOWN:
-                print(mouse_pos)
+                carta_seleccionada_jugador = seleccionar_carta(mouse_pos, cartas_jugador, pos_x_inicial_jugador, pos_y_jugador)
+                print(carta_seleccionada_jugador)
+                carta_seleccionada_maquina = seleccionar_carta_aleatoria(cartas_maquina)
+                print(carta_seleccionada_maquina)
                 
+                # ganador_manos = comparar_mano(carta_seleccionada_jugador, carta_seleccionada_maquina,JERARQUIA)
+                # print(ganador_manos)
+                
+                # # Evaluar el ganador de la ronda
+                # resultado_ronda = evaluar_ganador_ronda(ganador_manos)
+                # print("Ganador de la ronda:", resultado_ronda)
+                        
                 for boton in botones_juego:
                     if boton["rect"].collidepoint(evento.pos):
                         if boton["texto"] == "Envido":
                             if envido_activo == False:
-                                print(calcular_puntaje_envido(cartas_maquina))
-                                print(calcular_puntaje_envido(cartas_jugador))
                                 puntos_jugador, puntos_maquina = jugar_envido(cartas_jugador, cartas_maquina, puntos_jugador, puntos_maquina, respuesta=True)
                                 envido_activo = True
                         elif boton["texto"] == "Truco":
-                            truco_activo = True
                             print("Truco")
+                            truco_activo = True
+                            dibujar_texto('Se canto truco !!!', FUENTE_M, BLANCO, pantalla, ANCHO // 2, ALTO // 2)
+                            pygame.display.flip()
+                            pygame.time.wait(3000)
                         elif boton["texto"] == "Mazo":
                                 print('mazo')
                                 puntos_maquina += 1
-                                juego_activo = False
-                
+            
     # actualizar pantalla   
     pygame.display.flip()

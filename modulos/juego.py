@@ -18,18 +18,18 @@ def repartir(mazo: list) -> list:
     cartas_maquina = mazo[3:6]#index 3,4,5
     return cartas_jugador, cartas_maquina
 
-def comparar_mano(cartas: tuple, jerarquia: dict ) -> str:
-    '''Rtorna ganador mano'''
-    carta_jugador, carta_maquina = cartas
-    valor_jugador = jerarquia[f'{carta_jugador[0]} de {carta_jugador[1]}']
-    valor_maquina = jerarquia[f'{carta_maquina[0]} de {carta_maquina[1]}']
+def comparar_mano(carta_jugador: tuple, carta_maquina: tuple, jerarquia: dict) -> dict:
+    '''Retorna ganador mano'''
+    
+    valor_jugador = jerarquia[carta_jugador]
+    valor_maquina = jerarquia[carta_maquina]
 
     if valor_jugador > valor_maquina:
-        return "jugador"
+        return {'jugador': 1, 'maquina': 0, 'empate': 0}
     elif valor_jugador < valor_maquina:
-        return "maquina"
+        return {'jugador': 0, 'maquina': 1, 'empate': 0}
     else:
-        return "empate"
+        return {'jugador': 0, 'maquina': 0, 'empate': 1}
 
 def evaluar_ganador_ronda(ganador_manos: dict) -> str:
     if ganador_manos['jugador'] >= 2:
@@ -38,21 +38,4 @@ def evaluar_ganador_ronda(ganador_manos: dict) -> str:
         return 'maquina'
     else:
         return 'empate'
-
-def calcular_puntaje_envido(cartas: list) -> int:
-    #dict de equivalencias para envido
-    valores = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 10: 0, 11: 0, 12: 0}
-    palos = {}
-    for valor, palo in cartas:
-        if palo not in palos:
-            palos[palo] = []
-        palos[palo].append(valores[valor])
-    max_puntaje = 0
-    for palo, cartas_palo in palos.items():
-        if len(cartas_palo) > 1:
-            cartas_palo.sort(reverse=True)
-            max_puntaje = max(max_puntaje, 20 + cartas_palo[0] + cartas_palo[1])
-        else:
-            max_puntaje = max(max_puntaje, cartas_palo[0])
-    return max_puntaje
 

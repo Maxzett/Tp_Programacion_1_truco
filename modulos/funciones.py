@@ -1,6 +1,5 @@
-import pygame
+import pygame, random
 from modulos.constantes import *
-from modulos.juego import calcular_puntaje_envido
 
 def dibujar_texto(texto: str, fuente: any, color: tuple, superficie: any, x: int, y: int) -> None:
     '''Dibujar texto en pantalla'''
@@ -27,10 +26,9 @@ def cargar_imagen(ruta: str, ancho: int, alto: int) -> any:
     '''Cargar y escalar imagen'''
     imagen = pygame.image.load(ruta)
     return pygame.transform.scale(imagen, (ancho, alto))
-
-#mostrar cartas 
-def mostrar_cartas(cartas: list, x: any, y: any, visible: bool) -> None:
-    
+ 
+def mostrar_cartas(cartas: list, x: int, y: int, visible: bool) -> None:
+    """Mostrar imagen cartas en pantalla"""
     for i, (valor, palo) in enumerate(cartas):
         if visible == True:
             ruta_carta = f"images/{valor} de {palo}.jpg"
@@ -42,10 +40,17 @@ def mostrar_cartas(cartas: list, x: any, y: any, visible: bool) -> None:
         pygame.draw.rect(pantalla, BLANCO, (carta_x, carta_y, ancho_carta, alto_carta))
         pantalla.blit(imagen_carta, (carta_x, carta_y))
 
-def seleccionar_carta(mouse_pos: any, cartas: list, pos_x: int, pos_y: int) -> None:
-    
+def seleccionar_carta(mouse_pos: any, cartas: list, pos_x: int, pos_y: int) -> tuple:
+    '''Selecciona una carta de la mano'''
     for i, (valor, palo) in enumerate(cartas):
         x = pos_x + i * (ancho_carta + espacio)
         if x <= mouse_pos[0] <= x + ancho_carta and pos_y <= mouse_pos[1] <= pos_y + alto_carta:
-            return i
-    return None
+            return (valor, palo)
+        # return None
+
+def seleccionar_carta_aleatoria(cartas: list) -> tuple:
+    '''Selecciona aleatoriamente una carta de la mano'''
+    if not cartas:
+        return None  
+    
+    return random.choice(cartas)
