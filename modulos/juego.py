@@ -18,36 +18,6 @@ def repartir(mazo: list) -> list:
     cartas_maquina = mazo[3:6]#index 3,4,5
     return cartas_jugador, cartas_maquina
 
-def seleccionar_carta(mouse_pos, cartas_jugador, pos_x_inicio, pos_y):
-    """
-    Selecciona una carta del jugador basada en la posición del mouse.
-    
-    Parámetros:
-    - mouse_pos: tuple (x, y) posición del mouse.
-    - cartas_jugador: lista de cartas [(número, palo), ...].
-    - pos_x_inicio: posición X inicial de la primera carta en pantalla.
-    - pos_y: posición Y de las cartas en pantalla.
-    
-    Retorna:
-    - La carta seleccionada como tuple (número, palo) o `None` si no se selecciona ninguna.
-    """
-    ancho_carta = 60  # Ancho de cada carta
-    alto_carta = 90   # Alto de cada carta
-    espacio_entre_cartas = 20  # Espacio entre cartas
-
-    # Iterar por las cartas del jugador
-    for i, carta in enumerate(cartas_jugador):
-        # Calcular las coordenadas de cada carta
-        carta_x = pos_x_inicio + i * (ancho_carta + espacio_entre_cartas)
-        carta_rect = pygame.Rect(carta_x, pos_y, ancho_carta, alto_carta)
-        
-        # Verificar si el clic está dentro del rectángulo de la carta
-        if carta_rect.collidepoint(mouse_pos):
-            return carta  # Retorna la carta seleccionada
-    
-        return None  # Si no se selecciona ninguna carta
-
-
 def comparar_mano(cartas: tuple, jerarquia: dict ) -> str:
     '''Rtorna ganador mano'''
     carta_jugador, carta_maquina = cartas
